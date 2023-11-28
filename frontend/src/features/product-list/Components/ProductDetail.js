@@ -4,6 +4,7 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {  fetchProductByIdAsync, selectedProductById } from "../productListSlice";
+import { selectLoggedInUser } from "../../auth/authSlice";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -40,6 +41,7 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const dispatch = useDispatch();
+  const user = useSelector(selectLoggedInUser)
   const params = useParams();
   const product = useSelector(selectedProductById)
 
