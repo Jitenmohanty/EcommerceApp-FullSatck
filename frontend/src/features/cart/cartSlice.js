@@ -1,22 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchCount } from './cartApi';
+import { addToCart, fetchItemByUserId } from './cartApi';
 
 const initialState = {
-  value: 0,
+  items: [],
   status: 'idle',
+  value:0
 };
 
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
-  async (amount) => {
-    const response = await fetchCount(amount);
+export const addToCartAsync = createAsyncThunk(
+  'cart/addToCart',
+  async (item) => {
+    const response = await addToCart(item);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const fetchItemByUserIdAsync = createAsyncThunk(
+  'cart/fetchItemByUserId',
+  async (userId) => {
+    const response = await fetchItemByUserId(userId);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
 );
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: 'cart',
   initialState,
   reducers: {
     increment: (state) => {
@@ -25,18 +34,25 @@ export const counterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(incrementAsync.pending, (state) => {
+      .addCase(addToCartAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(incrementAsync.fulfilled, (state, action) => {
+      .addCase(addToCartAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.value += action.payload;
+        state.items.push(action.payload)
+      })
+      .addCase(fetchItemByUserIdAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchItemByUserIdAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.items = action.payload;
       });
   },
 });
 
 export const { increment } = counterSlice.actions;
 
-export const selectCount = (state) => state.counter.value;
+export const selectCartItem = (state) => state.cart.items;
 
 export default counterSlice.reducer;
