@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { addToCart, fetchItemByUserId } from './cartApi';
+import { addToCart, fetchItemByUserId, removeItemFromCart, updateItemById } from './cartApi';
 
 const initialState = {
   items: [],
@@ -19,6 +19,22 @@ export const fetchItemByUserIdAsync = createAsyncThunk(
   'cart/fetchItemByUserId',
   async (userId) => {
     const response = await fetchItemByUserId(userId);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const updateCartItemAsync = createAsyncThunk(
+  'cart/updateItemById',
+  async (updateId) => {
+    const response = await updateItemById(updateId);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
+export const removeItemFromCartAsync = createAsyncThunk(
+  'cart/removeItemFromCart',
+  async (ItemId) => {
+    const response = await removeItemFromCart(ItemId);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -47,7 +63,23 @@ export const counterSlice = createSlice({
       .addCase(fetchItemByUserIdAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.items = action.payload;
-      });
+      })
+      .addCase(updateCartItemAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateCartItemAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        const index = state.items.findIndex((item)=>item.id === action.payload.id)
+        state.items[index] = action.payload;
+      })
+      .addCase(removeItemFromCartAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(removeItemFromCartAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        const index = state.items.findIndex((item)=>item.id === action.payload.id)
+        state.items.splice(index,1);
+      })
   },
 });
 
