@@ -1,3 +1,5 @@
+import { fetchProductById } from "../product-list/productListAPI";
+
 export function addToCart(item) {
   return new Promise(async (resolve) => {
     const response = await fetch("http://localhost:8080/cart", {
@@ -40,5 +42,16 @@ export function removeItemFromCart(ItemId) {
     const data = await response.json();
     // TODO: on server it will only return some info of user (not password)
     resolve({ data:{id:ItemId} });
+  });
+}
+export function resetCart(userId) {
+  return new Promise(async (resolve) => {
+    const response = await fetchItemByUserId(userId)
+    const items = response.data;
+
+    for(let item of items){
+      await removeItemFromCart(item.id);
+    }
+    resolve({status:"Cart now empty"})
   });
 }
