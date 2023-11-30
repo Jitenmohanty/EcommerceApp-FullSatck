@@ -2415,61 +2415,6 @@
         "id": 1
       },
       "paymentMethod": "cash",
-      "selectedAddress": null,
-      "id": 1
-    },
-    {
-      "items": [
-        {
-          "id": 9,
-          "title": "Infinix INBOOK",
-          "description": "Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty",
-          "price": 1099,
-          "discountPercentage": 11.83,
-          "rating": 4.54,
-          "stock": 96,
-          "brand": "Infinix",
-          "category": "laptops",
-          "thumbnail": "https://i.dummyjson.com/data/products/9/thumbnail.jpg",
-          "images": [
-            "https://i.dummyjson.com/data/products/9/1.jpg",
-            "https://i.dummyjson.com/data/products/9/2.png",
-            "https://i.dummyjson.com/data/products/9/3.png",
-            "https://i.dummyjson.com/data/products/9/4.jpg",
-            "https://i.dummyjson.com/data/products/9/thumbnail.jpg"
-          ],
-          "quantity": 1,
-          "user": 1
-        }
-      ],
-      "totalAmount": 1099,
-      "totalItems": 1,
-      "user": {
-        "email": "jitenmohantyaz@gail.com",
-        "password": "Jitu1234",
-        "addresses": [
-          {
-            "name": "Jiten Mohanty",
-            "email": "jitenmohantyaz@gmail.com",
-            "phone": "7077830371",
-            "street": "Bhubaneswar",
-            "city": "Bhubaneswar",
-            "state": "Odisha",
-            "pinCode": "751015"
-          },
-          {
-            "name": "jitu Mohanty",
-            "email": "20mca26@imit.ac.in",
-            "phone": "7077830371",
-            "street": "cuttack",
-            "city": "Cuttack",
-            "state": "Odisha",
-            "pinCode": "751015"
-          }
-        ],
-        "id": 1
-      },
-      "paymentMethod": "cash",
       "selectedAddress": {
         "name": "Jiten Mohanty",
         "email": "jitenmohantyaz@gmail.com",
@@ -2545,6 +2490,128 @@
       },
       "status": "pending",
       "id": 3
+    },
+    {
+      "items": [
+        {
+          "id": 68,
+          "title": "Stylish Luxury Digital Watch",
+          "description": "Stylish Luxury Digital Watch For Girls / Women - Led Smart Ladies Watches For Girls",
+          "price": 57,
+          "discountPercentage": 9.03,
+          "rating": 4.55,
+          "stock": 77,
+          "brand": "Luxury Digital",
+          "category": "womens-watches",
+          "thumbnail": "https://i.dummyjson.com/data/products/68/thumbnail.webp",
+          "images": [
+            "https://i.dummyjson.com/data/products/68/1.jpg",
+            "https://i.dummyjson.com/data/products/68/2.jpg"
+          ],
+          "quantity": 1,
+          "user": 1
+        }
+      ],
+      "totalAmount": 57,
+      "totalItems": 1,
+      "user": {
+        "email": "jitenmohantyaz@gail.com",
+        "password": "Jitu1234",
+        "addresses": [
+          {
+            "name": "Jiten Mohanty",
+            "email": "jitenmohantyaz@gmail.com",
+            "phone": "7077830371",
+            "street": "Bhubaneswar",
+            "city": "Bhubaneswar",
+            "state": "Odisha",
+            "pinCode": "751015"
+          },
+          {
+            "name": "jitu Mohanty",
+            "email": "20mca26@imit.ac.in",
+            "phone": "7077830371",
+            "street": "cuttack",
+            "city": "Cuttack",
+            "state": "Odisha",
+            "pinCode": "751015"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "jitu Mohanty",
+        "email": "20mca26@imit.ac.in",
+        "phone": "7077830371",
+        "street": "cuttack",
+        "city": "Cuttack",
+        "state": "Odisha",
+        "pinCode": "751015"
+      },
+      "status": "pending",
+      "id": 4
+    },
+    {
+      "items": [
+        {
+          "id": 68,
+          "title": "Stylish Luxury Digital Watch",
+          "description": "Stylish Luxury Digital Watch For Girls / Women - Led Smart Ladies Watches For Girls",
+          "price": 57,
+          "discountPercentage": 9.03,
+          "rating": 4.55,
+          "stock": 77,
+          "brand": "Luxury Digital",
+          "category": "womens-watches",
+          "thumbnail": "https://i.dummyjson.com/data/products/68/thumbnail.webp",
+          "images": [
+            "https://i.dummyjson.com/data/products/68/1.jpg",
+            "https://i.dummyjson.com/data/products/68/2.jpg"
+          ],
+          "quantity": 1,
+          "user": 1
+        }
+      ],
+      "totalAmount": 57,
+      "totalItems": 1,
+      "user": {
+        "email": "jitenmohantyaz@gail.com",
+        "password": "Jitu1234",
+        "addresses": [
+          {
+            "name": "Jiten Mohanty",
+            "email": "jitenmohantyaz@gmail.com",
+            "phone": "7077830371",
+            "street": "Bhubaneswar",
+            "city": "Bhubaneswar",
+            "state": "Odisha",
+            "pinCode": "751015"
+          },
+          {
+            "name": "jitu Mohanty",
+            "email": "20mca26@imit.ac.in",
+            "phone": "7077830371",
+            "street": "cuttack",
+            "city": "Cuttack",
+            "state": "Odisha",
+            "pinCode": "751015"
+          }
+        ],
+        "id": 1
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "jitu Mohanty",
+        "email": "20mca26@imit.ac.in",
+        "phone": "7077830371",
+        "street": "cuttack",
+        "city": "Cuttack",
+        "state": "Odisha",
+        "pinCode": "751015"
+      },
+      "status": "pending",
+      "id": 5
     }
   ]
 }
