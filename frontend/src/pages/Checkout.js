@@ -7,13 +7,13 @@ import {
 } from "../features/cart/cartSlice";
 import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {
-  selectLoggedInUser,
-  updateUserAsync,
-} from "../features/auth/authSlice";
+import { updateUserAsync } from "../features/auth/authSlice";
 import { useState } from "react";
-import { createOrderAsync, selectCurrentOrder } from "../features/order/orderSlice";
-// import { createOrderAsync } from '../features/order/orderSlice';
+import {
+  createOrderAsync,
+  selectCurrentOrder,
+} from "../features/order/orderSlice";
+import { selectUserInfo } from "../features/user/userSlice";
 
 function Checkout() {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function Checkout() {
     formState: { errors },
   } = useForm();
 
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const items = useSelector(selectCartItem);
   const currentOrder = useSelector(selectCurrentOrder);
   const totalAmount = items.reduce(
@@ -62,7 +62,7 @@ function Checkout() {
       user,
       paymentMethod,
       selectedAddress,
-      status:"pending"
+      status: "pending",
     };
     dispatch(createOrderAsync(order));
 
@@ -74,7 +74,9 @@ function Checkout() {
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
-      {currentOrder && <Navigate to={`/order-success/${currentOrder.id}`}></Navigate>}
+      {currentOrder && (
+        <Navigate to={`/order-success/${currentOrder.id}`}></Navigate>
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
