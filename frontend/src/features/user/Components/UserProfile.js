@@ -26,7 +26,7 @@ export default function UserProfile() {
     setSelectedEditIndex(-1);
   };
   const handleRemove = (e, index) => {
-    console.log(user)
+    // console.log(user)
     const newUser = { ...user, addresses: [...user.addresses] }; // for shallow copy issue
     newUser.addresses.splice(index, 1);
     dispatch(updateUserAsync(newUser));
