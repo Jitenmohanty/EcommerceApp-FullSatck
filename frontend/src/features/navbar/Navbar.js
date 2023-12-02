@@ -8,6 +8,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartItem } from '../cart/cartSlice';
+import { selectLoggedInUser } from '../auth/authSlice';
 
 const user = {
   name: 'Tom Cook',
@@ -16,8 +17,9 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 };
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
+  { name: 'Dashboard', link: '#', user: true },
+  { name: 'Team', link: '#', user: true },
+  { name: 'Admin', link: '/admin', admin: true },
 ];
 const userNavigation = [
   { name: 'Your Profile', link: '/profile' },
@@ -32,6 +34,7 @@ function classNames(...classes) {
 function NavBar({ children }) {
 
   const items = useSelector(selectCartItem);
+  const user = useSelector(selectLoggedInUser)
 
   return (
     <>
@@ -54,19 +57,22 @@ function NavBar({ children }) {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          item[user?.role]?(
+
+                            <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.link}
                             className={classNames(
                               item.current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                              ? 'bg-gray-900 text-white'
+                              : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                               'rounded-md px-3 py-2 text-sm font-medium'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                          >
+                              )}
+                              aria-current={item.current ? 'page' : undefined}
+                              >
                             {item.name}
-                          </a>
+                          </Link>
+                        ):null
                         ))}
                       </div>
                     </div>
