@@ -26,6 +26,7 @@ import Logout from "./features/auth/Components/Logout";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedAdmin from "./features/auth/Components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
+import AdminOrdersPage from "./pages/AdminOrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedAdmin>
        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/orders",
+    element: (
+      <ProtectedAdmin>
+       <AdminOrdersPage></AdminOrdersPage>
       </ProtectedAdmin>
     ),
   },
