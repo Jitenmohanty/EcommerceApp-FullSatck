@@ -1,26 +1,54 @@
-import React, { useState, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Dialog, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
-import { removeItemFromCartAsync, selectCartItem, updateCartItemAsync } from './cartSlice';
-import { discountedPrice } from '../../app/constant';
+import React, { useState, Fragment } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Dialog, Transition } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import Swal from "sweetalert2";
 
+import { Link } from "react-router-dom";
+import {
+  removeItemFromCartAsync,
+  selectCartItem,
+  selectCartStatus,
+  updateCartItemAsync,
+} from "./cartSlice";
+import { discountedPrice } from "../../app/constant";
+import { Grid } from "react-loader-spinner";
 
 export default function Cart() {
   const dispatch = useDispatch();
-  const items = useSelector(selectCartItem)
-  const subTotal = items.reduce((amount,item)=> discountedPrice(item)*item.quantity+amount,0);
-  const totalItems = items.reduce((total,item)=>item.quantity+total,0)
+  const items = useSelector(selectCartItem);
+  const subTotal = items.reduce(
+    (amount, item) => discountedPrice(item) * item.quantity + amount,
+    0
+  );
+  const totalItems = items.reduce((total, item) => item.quantity + total, 0);
   const [open, setOpen] = useState(true);
+  const status = useSelector(selectCartStatus);
 
-  const handleUpdate = (e,item)=>{
-    dispatch(updateCartItemAsync({...item,quantity:e.target.value}))
-  }
+  const handleUpdate = (e, item) => {
+    dispatch(updateCartItemAsync({ ...item, quantity: e.target.value }));
+  };
 
-  const handleRemove = (id)=>{
-    dispatch(removeItemFromCartAsync(id))
-  } 
+  const handleRemove = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      dispatch(removeItemFromCartAsync(id));
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
 
   return (
     <>
@@ -31,6 +59,18 @@ export default function Cart() {
               Cart
             </h1>
             <div className="flow-root">
+              {status === "loading" ? (
+                <Grid
+                  height="80"
+                  width="80"
+                  color="rgb(79, 70, 229) "
+                  ariaLabel="grid-loading"
+                  radius="12.5"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              ) : null}
               <ul role="list" className="-my-6 divide-y divide-gray-200">
                 {items.map((item) => (
                   <li key={item.id} className="flex py-6">
@@ -62,7 +102,10 @@ export default function Cart() {
                           >
                             Qty
                           </label>
-                          <select onChange={(e)=> handleUpdate(e,item)} value={item.quantity}>
+                          <select
+                            onChange={(e) => handleUpdate(e, item)}
+                            value={item.quantity}
+                          >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -73,7 +116,7 @@ export default function Cart() {
 
                         <div className="flex">
                           <button
-                            onClick={()=>handleRemove(item.id)}
+                            onClick={() => handleRemove(item.id)}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
@@ -101,7 +144,7 @@ export default function Cart() {
               Shipping and taxes calculated at checkout.
             </p>
             <div className="mt-6">
-            <Link
+              <Link
                 to="/checkout"
                 className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
               >
@@ -112,13 +155,13 @@ export default function Cart() {
               <p>
                 or
                 <Link to="/">
-                <button
-                  type="button"
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  Continue Shopping
-                  <span aria-hidden="true"> &rarr;</span>
-                </button>
+                  <button
+                    type="button"
+                    className="font-medium text-indigo-600 hover:text-indigo-500"
+                  >
+                    Continue Shopping
+                    <span aria-hidden="true"> &rarr;</span>
+                  </button>
                 </Link>
               </p>
             </div>

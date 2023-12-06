@@ -3,10 +3,12 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {  fetchProductByIdAsync, selectedProductById } from "../productListSlice";
+import {  fetchProductByIdAsync, selectProductListStatus, selectedProductById } from "../productListSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
-import { addToCartAsync } from "../../cart/cartSlice";
+import { addToCartAsync, selectCartItem } from "../../cart/cartSlice";
 import { discountedPrice } from "../../../app/constant";
+import { Grid } from 'react-loader-spinner';
+import { toast } from "react-toastify";
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -44,12 +46,28 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser)
+  const items = useSelector(selectCartItem)
+  const status = useSelector(selectProductListStatus)
   const params = useParams();
   const product = useSelector(selectedProductById);
 
   const handleCart = (e)=>{
     e.preventDefault();
-    dispatch(addToCartAsync({...product,quantity:1,user:user.id}))
+    if (items.findIndex((item) => item.productId === product.id) < 0) {
+      console.log({ items, product });
+      const newItem = {
+        ...product,
+        productId: product.id,
+        quantity: 1,
+        user: user.id,
+      };
+      delete newItem['id'];
+      dispatch(addToCartAsync(newItem));
+      // TODO: it will be based on server response of backend
+      toast.success('Item added to Cart');
+    } else {
+      toast.error('Item Already added');
+    }
   }
 
   useEffect(()=>{
@@ -58,6 +76,18 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white">
+         {status === 'loading' ? (
+        <Grid
+          height="80"
+          width="80"
+          color="rgb(79, 70, 229) "
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      ) : null}
       {product && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">

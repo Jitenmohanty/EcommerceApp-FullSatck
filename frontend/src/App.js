@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
+import {ToastContainer} from 'react-toastify'
 import Protected from "./features/auth/Components/Protected";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
@@ -7,6 +8,7 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import SignupPage from "./pages/SignUpPage";
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   createBrowserRouter,
@@ -153,6 +155,7 @@ function App() {
   return (
     <div className="App">
       <RouterProvider router={router} />
+      <ToastContainer/>
     </div>
   );
 }
