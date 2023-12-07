@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import router from "./Routes/ProductRoute.js";
+import Brandrouter from "./Routes/BrandRoute.js";
+import Categoryrouter from "./Routes/CategoryRoute.js";
 
 const app = express();
 
@@ -13,6 +15,8 @@ app.use(
 
 app.use(express.json());
 app.use("/products", router);
+app.use("/brands", Brandrouter);
+app.use("/categories", Categoryrouter);
 
 main().catch((err) => console.log(err));
 
