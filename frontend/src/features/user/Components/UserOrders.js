@@ -14,7 +14,7 @@ export default function UserOrders() {
 
   useEffect(() => {
     dispatch(fetchUserOrdersAsync(userinfo.id));
-  }, [dispatch, userinfo]);
+  }, [dispatch, userinfo.id]);
 
   return (
     <div>

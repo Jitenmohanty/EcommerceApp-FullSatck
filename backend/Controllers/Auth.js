@@ -5,7 +5,7 @@ export const createUser = async (req, res) => {
 
   try {
     const docs = await user.save();
-    res.status(200).json(docs);
+    res.status(200).json({ id: docs.id, role: doc.role });
   } catch (error) {
     res.status(400).json(error);
   }
@@ -19,14 +19,10 @@ export const loginUser = async (req, res) => {
       res.status(401).json({ message: "No such user email" });
     } else if (user.password === req.body.password) {
       // TODO: We will make addresses independent of login
-      res
-        .status(200)
-        .json({
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          addresses: user.addresses,
-        });
+      res.status(200).json({
+        id: user.id,
+        role: user.role,
+      });
     } else {
       res.status(401).json({ message: "invalid credentials" });
     }
