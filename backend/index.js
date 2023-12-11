@@ -1,9 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import router from "./Routes/ProductRoute.js";
+import Productrouter from "./Routes/ProductRoute.js";
 import Brandrouter from "./Routes/BrandRoute.js";
 import Categoryrouter from "./Routes/CategoryRoute.js";
+import UserRouter from "./Routes/UserRoutes.js";
+import AuthRouter from "./Routes/AuthRoutes.js";
+import CartRouter from "./Routes/CartRoutes.js";
+import OrderRouter from "./Routes/OrderRoute.js";
 
 const app = express();
 
@@ -14,9 +18,13 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/products", router);
+app.use('/users',UserRouter);
+app.use('/auth',AuthRouter);
+app.use("/products", Productrouter);
 app.use("/brands", Brandrouter);
 app.use("/categories", Categoryrouter);
+app.use("/cart",CartRouter)
+app.use("/orders",OrderRouter)
 
 main().catch((err) => console.log(err));
 

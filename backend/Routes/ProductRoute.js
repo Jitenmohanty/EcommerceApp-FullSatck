@@ -1,11 +1,11 @@
-import express, { Router } from 'express'
+import  { Router } from 'express'
 import { createProduct, fetchAllProducts, fetchProductById, updateProduct } from '../Controllers/Product.js';
 
-const router = Router();
+const Productrouter = Router();
 
-router.post('/',createProduct)
+Productrouter.post('/',createProduct)
       .get('/',fetchAllProducts)
       .get('/:id',fetchProductById)
       .patch('/:id',updateProduct)
 
-export default router;
+export default Productrouter;

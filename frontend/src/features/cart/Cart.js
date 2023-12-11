@@ -18,32 +18,32 @@ export default function Cart() {
   const dispatch = useDispatch();
   const items = useSelector(selectCartItem);
   const subTotal = items.reduce(
-    (amount, item) => discountedPrice(item) * item.quantity + amount,
+    (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
-  const [open, setOpen] = useState(true);
   const status = useSelector(selectCartStatus);
-
+  console.log(items)
   const handleUpdate = (e, item) => {
-    dispatch(updateCartItemAsync({ ...item, quantity: e.target.value }));
+    console.log(item.id)
+    dispatch(updateCartItemAsync({id:item.id, quantity:+e.target.value }));
   };
 
-  const handleRemove = (id) => {
+  const handleRemove = (item) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: `Delete ${item.product?.title}`,
+      text: "Are you sure you want to delete this Cart item ?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
-      dispatch(removeItemFromCartAsync(id));
+      dispatch(removeItemFromCartAsync(item.id));
       if (result.isConfirmed) {
         Swal.fire({
           title: "Deleted!",
-          text: "Your file has been deleted.",
+          text: "Your Item has been deleted.",
           icon: "success",
         });
       }
@@ -76,8 +76,8 @@ export default function Cart() {
                   <li key={item.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={item.thumbnail}
-                        alt={item.title}
+                        src={item.product?.thumbnail}
+                        alt={item.product?.title}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -86,12 +86,12 @@ export default function Cart() {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <a href={item.href}>{item.title}</a>
+                            <a href={item.product?.id}>{item.product?.title}</a>
                           </h3>
-                          <p className="ml-4">${item.price}</p>
+                          <p className="ml-4">${discountedPrice(item.product)}</p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
-                          {item.brand}
+                          {item.product?.brand}
                         </p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
@@ -116,7 +116,7 @@ export default function Cart() {
 
                         <div className="flex">
                           <button
-                            onClick={() => handleRemove(item.id)}
+                            onClick={() => handleRemove(item)}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
