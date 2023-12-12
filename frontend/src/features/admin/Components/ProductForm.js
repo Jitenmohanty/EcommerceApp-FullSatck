@@ -2,7 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import {toast} from 'react-toastify'
 import {
   clearSelectedProduct,
   createProductAsync,
@@ -26,7 +27,6 @@ function ProductForm() {
   const dispatch = useDispatch();
   const params = useParams();
   const selectedProduct = useSelector(selectedProductById);
-  const [openModal, setOpenModal] = useState(null);
 
   useEffect(() => {
     if (params.id) {
@@ -100,9 +100,11 @@ function ProductForm() {
           product.id = params.id;
           product.rating = selectedProduct.rating || 0;
           dispatch(updateProductAsync(product));
+          toast.success("Item Updated..")
           reset();
         } else {
           dispatch(createProductAsync(product));
+          toast.success("Item Created...!")
           reset();
           //TODO:  on product successfully added clear fields and show a message
         }
@@ -115,7 +117,7 @@ function ProductForm() {
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            {selectedProduct?.deleted && (
+            {selectedProduct && selectedProduct?.deleted && (
               <h2 className="text-red-500 sm:col-span-6">
                 This product is deleted
               </h2>
