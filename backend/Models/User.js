@@ -11,7 +11,7 @@ const userSchema = new Schema({
     unique: true,
   },
   password: {
-    type: String,
+    type: Buffer,
     required: true,
   },
   role: { type: String, required: true, default: "user" },
@@ -19,6 +19,7 @@ const userSchema = new Schema({
     type: [Schema.Types.Mixed],
   },
   orders: { type: [Schema.Types.Mixed] },
+  salt:Buffer
 });
 
 const virtual = userSchema.virtual('id');

@@ -1,32 +1,44 @@
 import { User } from "../Models/User.js";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import { sanitizeUser } from "../Services/common.js";
+
+const SECRET_KEY = "SECRET_KEY";
 
 export const createUser = async (req, res) => {
   const user = new User(req.body);
 
   try {
-    const docs = await user.save();
-    res.status(200).json({ id: docs.id, role: doc.role });
+    const salt = crypto.randomBytes(16);
+    crypto.pbkdf2(
+      req.body.password,
+      salt,
+      310000,
+      32,
+      "sha256",
+      async function (err, hashedPassword) {
+        const user = new User({ ...req.body, password: hashedPassword, salt });
+        const docs = await user.save();
+
+        req.login(sanitizeUser(docs), (err) => {
+          // this also calls serializer and adds to session
+          if (err) {
+            res.status(400).json(err);
+          } else {
+            const token = jwt.sign(sanitizeUser(docs), SECRET_KEY);
+            res.status(201).json(token);
+          }
+        });
+      }
+    );
   } catch (error) {
     res.status(400).json(error);
   }
 };
 export const loginUser = async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.body.email }).exec();
+  res.json(req.user);
+};
 
-    if (!user) {
-      // TODO: this is just temporary, we will use strong password auth
-      res.status(401).json({ message: "No such user email" });
-    } else if (user.password === req.body.password) {
-      // TODO: We will make addresses independent of login
-      res.status(200).json({
-        id: user.id,
-        role: user.role,
-      });
-    } else {
-      res.status(401).json({ message: "invalid credentials" });
-    }
-  } catch (error) {
-    res.status(400).json(error);
-  }
+export const checkUser = async (req, res) => {
+  res.json({ status: "success", user: req.user });
 };
