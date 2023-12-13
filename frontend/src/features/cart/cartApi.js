@@ -11,9 +11,9 @@ export function addToCart(item) {
     resolve({ data });
   });
 }
-export function fetchItemByUserId(userId) {
+export function fetchItemByUserId() {
   return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8080/cart?user=" + userId);
+    const response = await fetch("http://localhost:8080/cart");
     const data = await response.json();
     // TODO: on server it will only return some info of user (not password)
     resolve({ data });
@@ -43,9 +43,9 @@ export function removeItemFromCart(ItemId) {
     resolve({ data:{id:ItemId} });
   });
 }
-export function resetCart(userId) {
+export function resetCart() {
   return new Promise(async (resolve) => {
-    const response = await fetchItemByUserId(userId)
+    const response = await fetchItemByUserId()
     const items = response.data;
 
     for(let item of items){

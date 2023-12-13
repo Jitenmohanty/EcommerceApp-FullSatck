@@ -1,9 +1,9 @@
 import { Order } from "../Models/Order.js";
 
 export const fetchOrderByUser = async(req,res)=>{
-    const {userId} = req.params;
+    const {id} = req.user;
     try {
-        const orderItem = await Order.find({user:userId})
+        const orderItem = await Order.find({user:id})
         res.status(201).json(orderItem)
     } catch (error) {
         res.status(400).json(error)
@@ -13,7 +13,6 @@ export const fetchOrderByUser = async(req,res)=>{
 export const fetchAllOrders = async(req,res)=>{
      // sort = {_sort:"price",_order="desc"}
     // pagination = {_page:1,_limit=10}
-    const queryString =""
     let query = Order.find({deleted:{$ne:true}})
     let totalOrdersQuery = Order.find({deleted:{$ne:true}})
 

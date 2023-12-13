@@ -17,8 +17,8 @@ export const addToCartAsync = createAsyncThunk(
 );
 export const fetchItemByUserIdAsync = createAsyncThunk(
   'cart/fetchItemByUserId',
-  async (userId) => {
-    const response = await fetchItemByUserId(userId);
+  async () => {
+    const response = await fetchItemByUserId();
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -41,8 +41,8 @@ export const removeItemFromCartAsync = createAsyncThunk(
 );
 export const  resetCartAsync= createAsyncThunk(
   'cart/resetCart',
-  async (userId) => {
-    const response = await resetCart(userId);
+  async () => {
+    const response = await resetCart();
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }

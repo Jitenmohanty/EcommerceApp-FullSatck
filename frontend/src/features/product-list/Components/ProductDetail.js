@@ -4,7 +4,6 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {  fetchProductByIdAsync, selectProductListStatus, selectedProductById } from "../productListSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
 import { addToCartAsync, selectCartItem } from "../../cart/cartSlice";
 import { discountedPrice } from "../../../app/constant";
 import { Grid } from 'react-loader-spinner';
@@ -45,7 +44,6 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser)
   const items = useSelector(selectCartItem)
   const status = useSelector(selectProductListStatus)
   const params = useParams();
@@ -58,7 +56,6 @@ export default function ProductDetail() {
       const newItem = {
         product: product.id,
         quantity: 1,
-        user: user.id,
       };
       delete newItem['id'];
       dispatch(addToCartAsync(newItem));

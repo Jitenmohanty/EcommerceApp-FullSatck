@@ -6,8 +6,6 @@ import { sanitizeUser } from "../Services/common.js";
 const SECRET_KEY = "SECRET_KEY";
 
 export const createUser = async (req, res) => {
-  const user = new User(req.body);
-
   try {
     const salt = crypto.randomBytes(16);
     crypto.pbkdf2(
@@ -26,7 +24,12 @@ export const createUser = async (req, res) => {
             res.status(400).json(err);
           } else {
             const token = jwt.sign(sanitizeUser(docs), SECRET_KEY);
-            res.status(201).json(token);
+            res.cookie('jwt',token,{
+              expires:new Date(Date.now()+3600000),
+              httpOnly:true
+            })
+            .status(201)
+            .json(token)
           }
         });
       }
@@ -36,7 +39,13 @@ export const createUser = async (req, res) => {
   }
 };
 export const loginUser = async (req, res) => {
-  res.json(req.user);
+  res
+  .cookie('jwt', req.user.token, {
+    expires: new Date(Date.now() + 3600000),
+    httpOnly: true,
+  })
+  .status(201)
+  .json(req.user.token)
 };
 
 export const checkUser = async (req, res) => {

@@ -8,6 +8,7 @@ import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { Strategy as JwtStrategy } from "passport-jwt";
 import { ExtractJwt } from "passport-jwt";
+import cookieParser from "cookie-parser";
 
 import Productrouter from "./Routes/ProductRoute.js";
 import Brandrouter from "./Routes/BrandRoute.js";
@@ -16,15 +17,18 @@ import UserRouter from "./Routes/UserRoutes.js";
 import AuthRouter from "./Routes/AuthRoutes.js";
 import CartRouter from "./Routes/CartRoutes.js";
 import OrderRouter from "./Routes/OrderRoute.js";
-import { isAuth, sanitizeUser } from "./Services/common.js";
+import { cookieExtractor, isAuth, sanitizeUser } from "./Services/common.js";
 import { User } from "./Models/User.js";
 
 const app = express();
 
 const SECRET_KEY = "SECRET_KEY";
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET_KEY;
+
+app.use(express.static('build'));
+app.use(cookieParser())
 
 app.use(
   session({
@@ -75,7 +79,7 @@ passport.use(
             return done(null, false, { message: "invalid credentials" });
           }
           const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
-          done(null, token);
+          done(null, {token});
         }
       );
     } catch (error) {
@@ -90,7 +94,7 @@ passport.use(
     console.log({ jwt_payload });
 
     try {
-      const user = await User.findOne({ id: jwt_payload.sub });
+      const user = await User.findById( jwt_payload.id);
       if (user) {
         return done(null, sanitizeUser(user)); //this calls serielizer
       } else {

@@ -2,9 +2,9 @@ import { Cart } from "../Models/Cart.js";
 
 
 export const fetchCartByUser = async(req,res)=>{
-    const {user} = req.query;
+    const {id} = req.user;
     try {
-        const cartItem = await Cart.find({user:user}).populate('product')
+        const cartItem = await Cart.find({user:id}).populate('product')
         res.status(201).json(cartItem)
     } catch (error) {
         res.status(400).json(error)
@@ -12,7 +12,8 @@ export const fetchCartByUser = async(req,res)=>{
 }
 
 export const addToCart = async(req,res)=>{
-    const cartItem = new Cart(req.body);
+    const {id} = req.user;
+    const cartItem = new Cart({...req.body,user:id});
     try {
         const docs = await cartItem.save();
         const result = await docs.populate('product');
