@@ -1,34 +1,46 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { checkUser, createUser, signOut } from './authAPI';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { checkAuth, createUser, loginUser, signOut } from "./authAPI";
 
 const initialState = {
-  loggedInUserToken: null,// this should only contain user identity => 'id'/'role'
-  status: 'idle',
-  error:null
+  loggedInUserToken: null, // this should only contain user identity => 'id'/'role'
+  status: "idle",
+  error: null,
+  userChecked:false
 };
 
 export const createUserAsync = createAsyncThunk(
-  'user/createUser',
+  "user/createUser",
   async (userData) => {
     const response = await createUser(userData);
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
 );
-export const checkUserAsync = createAsyncThunk(
-  'user/checkUser',
-  async (loginInfo, {rejectWithValue}) => {
+export const loginUserAsync = createAsyncThunk(
+  "user/loginUser",
+  async (loginInfo, { rejectWithValue }) => {
     try {
-      const response = await checkUser(loginInfo);
+      const response = await loginUser(loginInfo);
       return response.data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error)
+      return rejectWithValue(error.message || 'An error occurred');
+    }
+  }
+);
+export const checkAuthAsync = createAsyncThunk(
+  "user/checkAuth",
+  async () => {
+    try {
+      const response = await checkAuth();
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
   }
 );
 export const logoutUserAsync = createAsyncThunk(
-  'user/logoutUser',
+  "user/logoutUser",
   async (loginInfo) => {
     const response = await signOut(loginInfo);
     // The value we return becomes the `fulfilled` action payload
@@ -37,7 +49,7 @@ export const logoutUserAsync = createAsyncThunk(
 );
 
 export const authSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {},
@@ -45,34 +57,46 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(createUserAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(createUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.loggedInUserToken= action.payload;
-      })
-      .addCase(checkUserAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(checkUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.loggedInUserToken = action.payload;
       })
-      .addCase(checkUserAsync.rejected, (state, action) => {
-        state.status = 'idle';
+      .addCase(loginUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(loginUserAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loggedInUserToken = action.payload;
+      })
+      .addCase(loginUserAsync.rejected, (state, action) => {
+        state.status = "idle";
         state.error = action.payload;
       })
+      .addCase(checkAuthAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(checkAuthAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.loggedInUserToken = action.payload;
+        state.userChecked = true;
+      })
+      .addCase(checkAuthAsync.rejected, (state, action) => {
+        state.status = "idle";
+        state.userChecked = true;
+      })
       .addCase(logoutUserAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(logoutUserAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.loggedInUserToken = null;
-      })
+      });
   },
 });
 
-
-export const selectLoggedInUser = (state)=>state.auth.loggedInUserToken;
-export const selectError = (state)=> state.auth.error
+export const selectLoggedInUser = (state) => state.auth.loggedInUserToken;
+export const selectError = (state) => state.auth.error;
+export const selectUserChecked = (state) => state.auth.userChecked;
 export default authSlice.reducer;

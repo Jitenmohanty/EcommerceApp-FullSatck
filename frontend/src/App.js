@@ -16,7 +16,7 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchItemByUserIdAsync } from "./features/cart/cartSlice";
-import { selectLoggedInUser } from "./features/auth/authSlice";
+import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
 import PageNotFound from "./pages/404";
 import UserOrdersPage from "./pages/UserOrderPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
@@ -146,6 +146,12 @@ const router = createBrowserRouter([
 function App() {
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
+  const userChecked = useSelector(selectUserChecked);
+
+  useEffect(()=>{
+    dispatch(checkAuthAsync())
+  },[dispatch])
+
   useEffect(() => {
     if (user) {
       dispatch(fetchItemByUserIdAsync());
@@ -154,7 +160,7 @@ function App() {
   }, [dispatch, user]);
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      {userChecked && <RouterProvider router={router} />}
       <ToastContainer/>
     </div>
   );

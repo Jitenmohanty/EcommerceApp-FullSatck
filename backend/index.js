@@ -1,4 +1,5 @@
 import express from "express";
+const app = express();
 import mongoose from "mongoose";
 import cors from "cors";
 import session from "express-session";
@@ -20,15 +21,13 @@ import OrderRouter from "./Routes/OrderRoute.js";
 import { cookieExtractor, isAuth, sanitizeUser } from "./Services/common.js";
 import { User } from "./Models/User.js";
 
-const app = express();
-
 const SECRET_KEY = "SECRET_KEY";
 const opts = {};
 opts.jwtFromRequest = cookieExtractor;
 opts.secretOrKey = SECRET_KEY;
 
-app.use(express.static('build'));
-app.use(cookieParser())
+app.use(express.static("build"));
+app.use(cookieParser());
 
 app.use(
   session({
@@ -58,9 +57,11 @@ app.use("/orders", isAuth(), OrderRouter);
 
 passport.use(
   "local",
-  new LocalStrategy(
-    {usernameField:'email'},
-    async function (email, password, done) {
+  new LocalStrategy({ usernameField: "email" }, async function (
+    email,
+    password,
+    done
+  ) {
     // by default passport uses username
     try {
       const user = await User.findOne({ email: email });
@@ -79,7 +80,7 @@ passport.use(
             return done(null, false, { message: "invalid credentials" });
           }
           const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
-          done(null, {token});
+          done(null, { id: user.id, role: user.role }); // this lines sends to serializer
         }
       );
     } catch (error) {
@@ -94,7 +95,7 @@ passport.use(
     console.log({ jwt_payload });
 
     try {
-      const user = await User.findById( jwt_payload.id);
+      const user = await User.findById(jwt_payload.id);
       if (user) {
         return done(null, sanitizeUser(user)); //this calls serielizer
       } else {

@@ -13,41 +13,48 @@ export const createUser = async (req, res) => {
       salt,
       310000,
       32,
-      "sha256",
+      'sha256',
       async function (err, hashedPassword) {
         const user = new User({ ...req.body, password: hashedPassword, salt });
-        const docs = await user.save();
+        const doc = await user.save();
 
-        req.login(sanitizeUser(docs), (err) => {
+        req.login(sanitizeUser(doc), (err) => {
           // this also calls serializer and adds to session
           if (err) {
             res.status(400).json(err);
           } else {
-            const token = jwt.sign(sanitizeUser(docs), SECRET_KEY);
-            res.cookie('jwt',token,{
-              expires:new Date(Date.now()+3600000),
-              httpOnly:true
-            })
-            .status(201)
-            .json(token)
+            const token = jwt.sign(sanitizeUser(doc), SECRET_KEY);
+            res
+              .cookie('jwt', token, {
+                expires: new Date(Date.now() + 3600000),
+                httpOnly: true,
+              })
+              .status(201)
+              .json({id:doc.id, role:doc.role});
           }
         });
       }
     );
-  } catch (error) {
-    res.status(400).json(error);
+  } catch (err) {
+    res.status(400).json(err);
   }
 };
+
 export const loginUser = async (req, res) => {
+  console.log(req.user)
   res
-  .cookie('jwt', req.user.token, {
-    expires: new Date(Date.now() + 3600000),
-    httpOnly: true,
-  })
-  .status(201)
-  .json(req.user.token)
+    .cookie('jwt',req.user.token ,{
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    })
+    .status(201)
+    .json(req.user);
 };
 
-export const checkUser = async (req, res) => {
-  res.json({ status: "success", user: req.user });
+export const checkAuth = async (req, res) => {
+  if(req.user){
+    res.json(req.user);
+  } else{
+    res.sendStatus(401);
+  }
 };
