@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./App.css";
-import {ToastContainer} from 'react-toastify'
+import { ToastContainer } from "react-toastify";
 import Protected from "./features/auth/Components/Protected";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
@@ -8,15 +8,16 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import SignupPage from "./pages/SignUpPage";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchItemByUserIdAsync } from "./features/cart/cartSlice";
-import { checkAuthAsync, selectLoggedInUser, selectUserChecked } from "./features/auth/authSlice";
+import {
+  checkAuthAsync,
+  selectLoggedInUser,
+  selectUserChecked,
+} from "./features/auth/authSlice";
 import PageNotFound from "./pages/404";
 import UserOrdersPage from "./pages/UserOrderPage";
 import OrderSuccessPage from "./pages/OrderSuccessPage";
@@ -29,6 +30,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedAdmin from "./features/auth/Components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
+import StripeCheckout from "./pages/StripeCheckout";
 
 const router = createBrowserRouter([
   {
@@ -53,15 +55,23 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Protected><UserProfilePage></UserProfilePage></Protected>
+    element: (
+      <Protected>
+        <UserProfilePage></UserProfilePage>
+      </Protected>
+    ),
   },
   {
     path: "/admin",
-    element: <ProtectedAdmin><AdminHome></AdminHome></ProtectedAdmin>
+    element: (
+      <ProtectedAdmin>
+        <AdminHome></AdminHome>
+      </ProtectedAdmin>
+    ),
   },
   {
     path: "/forgot-password",
-    element: <ForgotPasswordPage></ForgotPasswordPage>
+    element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   {
     path: "/cart",
@@ -76,6 +86,14 @@ const router = createBrowserRouter([
     element: (
       <Protected>
         <Checkout></Checkout>
+      </Protected>
+    ),
+  },
+  {
+    path: '/stripe-checkout/',
+    element: (
+      <Protected>
+        <StripeCheckout></StripeCheckout>
       </Protected>
     ),
   },
@@ -107,7 +125,7 @@ const router = createBrowserRouter([
     path: "/admin/product-form/edit/:id",
     element: (
       <ProtectedAdmin>
-       <AdminProductFormPage></AdminProductFormPage>
+        <AdminProductFormPage></AdminProductFormPage>
       </ProtectedAdmin>
     ),
   },
@@ -115,31 +133,29 @@ const router = createBrowserRouter([
     path: "/admin/orders",
     element: (
       <ProtectedAdmin>
-       <AdminOrdersPage></AdminOrdersPage>
+        <AdminOrdersPage></AdminOrdersPage>
       </ProtectedAdmin>
     ),
   },
   {
-    path:"/order-success/:id",
-    element:(
+    path: "/order-success/:id",
+    element: (
       <Protected>
         <OrderSuccessPage></OrderSuccessPage>
       </Protected>
-    )
+    ),
   },
   {
-    path:"/orders",
-    element:(
+    path: "/orders",
+    element: (
       <Protected>
         <UserOrdersPage></UserOrdersPage>
       </Protected>
-    )
+    ),
   },
   {
-    path:"*",
-    element:(
-        <PageNotFound></PageNotFound>
-    )
+    path: "*",
+    element: <PageNotFound></PageNotFound>,
   },
 ]);
 
@@ -148,20 +164,32 @@ function App() {
   const user = useSelector(selectLoggedInUser);
   const userChecked = useSelector(selectUserChecked);
 
-  useEffect(()=>{
-    dispatch(checkAuthAsync())
-  },[dispatch])
+  useEffect(() => {
+    dispatch(checkAuthAsync());
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       dispatch(fetchItemByUserIdAsync());
-      dispatch(fetchLoggedInUserAsync())
+      dispatch(fetchLoggedInUserAsync());
     }
   }, [dispatch, user]);
   return (
     <div className="App">
       {userChecked && <RouterProvider router={router} />}
-      <ToastContainer/>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        toastStyle={{fontWeight:"bolder",fontSize:"1.2rem"}}
+      />
     </div>
   );
 }
