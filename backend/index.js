@@ -1,4 +1,6 @@
 import express from "express";
+import dotenv from 'dotenv'
+dotenv.config();
 const app = express();
 import mongoose from "mongoose";
 import cors from "cors";
@@ -8,8 +10,15 @@ import { Strategy as LocalStrategy } from "passport-local";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { Strategy as JwtStrategy } from "passport-jwt";
-import { ExtractJwt } from "passport-jwt";
 import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+console.log(process.env)
 
 import Productrouter from "./Routes/ProductRoute.js";
 import Brandrouter from "./Routes/BrandRoute.js";
@@ -23,21 +32,53 @@ import { User } from "./Models/User.js";
 
 import stripeModule from 'stripe';
 
-const stripe = stripeModule('sk_test_51N5NLVSF2Mo4AGVvozBmb6d5td4kq0lexk43naVyOdmdzLoO4g8LLDsCFc7pT08pUjBesL0G95eP8Xv95kbOaRgU00qrTMpPnY');
-const server = express();
+const stripe = stripeModule(process.env.STRIPE_SERVER_KEY);
+
+// Webhook
+
+// TODO: we will capture actual order after deploying out server live on public URL
+
+const endpointSecret = process.env.ENDPOINT_SECRET;
+
+app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+  const sig = request.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle the event
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      const paymentIntentSucceeded = event.data.object;
+      console.log({paymentIntentSucceeded})
+      // Then define and call a function to handle the event payment_intent.succeeded
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  response.send();
+});
 
 
-const SECRET_KEY = "SECRET_KEY";
 const opts = {};
 opts.jwtFromRequest = cookieExtractor;
-opts.secretOrKey = SECRET_KEY;
+opts.secretOrKey = process.env.JWT_SECRET_KEY;
 
-app.use(express.static("build"));
+app.use(express.static(join(__dirname, 'build')));
 app.use(cookieParser());
 
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: process.env.SESSION_KEY,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
   })
@@ -86,7 +127,7 @@ passport.use(
           if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
             return done(null, false, { message: "invalid credentials" });
           }
-          const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
+          const token = jwt.sign(sanitizeUser(user), process.env.JWT_SECRET_KEY);
           done(null, { id: user.id, role: user.role }); // this lines sends to serializer
         }
       );
@@ -148,47 +189,14 @@ app.post("/create-payment-intent", async (req, res) => {
   });
 });
 
-// Webhook
-
-// TODO: we will capture actual order after deploying out server live on public URL
-
-const endpointSecret = "whsec_aae35af55367d7743aa5c13af2430d84e1863b826f7f4561b5b0f00030380cb7";
-
-app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
-  const sig = request.headers['stripe-signature'];
-
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-  } catch (err) {
-    response.status(400).send(`Webhook Error: ${err.message}`);
-    return;
-  }
-
-  // Handle the event
-  switch (event.type) {
-    case 'payment_intent.succeeded':
-      const paymentIntentSucceeded = event.data.object;
-      console.log({paymentIntentSucceeded})
-      // Then define and call a function to handle the event payment_intent.succeeded
-      break;
-    // ... handle other event types
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-
-  // Return a 200 response to acknowledge receipt of the event
-  response.send();
-});
 
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/ecommerce");
+  await mongoose.connect(process.env.MONGO_DB_URL);
   console.log("database connected");
 }
 
-app.listen(8080, () => {
+app.listen(process.env.port, () => {
   console.log("server started.");
 });
