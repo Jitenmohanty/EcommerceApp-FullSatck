@@ -29,6 +29,7 @@ import { cookieExtractor, isAuth, sanitizeUser } from "./Services/common.js";
 import { User } from "./Models/User.js";
 
 import stripeModule from 'stripe';
+import { Order } from "./Models/Order.js";
 
 const stripe = stripeModule(process.env.STRIPE_SERVER_KEY);
 
@@ -38,7 +39,7 @@ const stripe = stripeModule(process.env.STRIPE_SERVER_KEY);
 
 const endpointSecret = process.env.ENDPOINT_SECRET;
 
-app.post('/webhook', express.raw({type: 'application/json'}), (request, response) => {
+app.post('/webhook', express.raw({type: 'application/json'}), async(request, response) => {
   const sig = request.headers['stripe-signature'];
 
   let event;
@@ -55,6 +56,9 @@ app.post('/webhook', express.raw({type: 'application/json'}), (request, response
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object;
       console.log({paymentIntentSucceeded})
+      const order = await Order.findById(paymentIntentSucceeded.metadata.orderId);
+      order.paymentStatus='received';
+      await order.save()
       // Then define and call a function to handle the event payment_intent.succeeded
       break;
     // ... handle other event types
