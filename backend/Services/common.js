@@ -13,7 +13,6 @@ export const cookieExtractor = (req) => {
   if (req && req.cookies) {
     token = req.cookies["jwt"];
   }
-  token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1N2IyMjAyYzBmZDZlZGQ2ZmJhZTVmYyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzAyNTY4NDUwfQ.xifBMDErrGvL48v1O-f9g7hts3FAv6zC5Q6Jhwuagl0";
+  
   return token;
 };
