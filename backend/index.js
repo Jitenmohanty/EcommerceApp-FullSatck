@@ -18,8 +18,6 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-console.log(process.env)
-
 import Productrouter from "./Routes/ProductRoute.js";
 import Brandrouter from "./Routes/BrandRoute.js";
 import Categoryrouter from "./Routes/CategoryRoute.js";
@@ -103,6 +101,8 @@ app.use("/categories", isAuth(), Categoryrouter);
 app.use("/cart", isAuth(), CartRouter);
 app.use("/orders", isAuth(), OrderRouter);
 
+app.get('*',(req,res)=> res.sendFile(path.resolve('build','index.html')))
+
 passport.use(
   "local",
   new LocalStrategy({ usernameField: "email" }, async function (
@@ -173,7 +173,7 @@ passport.deserializeUser(function (user, cb) {
 });
 
 app.post("/create-payment-intent", async (req, res) => {
-  const { totalAmount } = req.body;
+  const { totalAmount, orderId } = req.body;
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -182,8 +182,10 @@ app.post("/create-payment-intent", async (req, res) => {
     automatic_payment_methods: {
       enabled: true,
     },
+    metadata:{
+        orderId
+      }
   });
-
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
