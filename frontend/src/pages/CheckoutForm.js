@@ -61,7 +61,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `https://ecommerce-app-full-satck.vercel.app/order-success/${currentOrder.id}`,
+        return_url: `https://ecommerce-app-full-satck-jitenmohanty.vercel.app/order-success/${currentOrder.id}`,
       },
     });
 
