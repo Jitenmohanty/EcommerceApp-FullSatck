@@ -31,6 +31,7 @@ import ProtectedAdmin from "./features/auth/Components/ProtectedAdmin";
 import AdminHome from "./pages/AdminHome";
 import AdminOrdersPage from "./pages/AdminOrdersPage";
 import StripeCheckout from "./pages/StripeCheckout";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -148,9 +149,13 @@ const router = createBrowserRouter([
   {
     path: "/my-orders",
     element: (
-      <Protected>
         <UserOrdersPage></UserOrdersPage>
-      </Protected>
+    ),
+  },
+  {
+    path: "/reset-password",
+    element: (
+     <ResetPasswordPage/>
     ),
   },
   {

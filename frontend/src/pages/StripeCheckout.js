@@ -10,7 +10,7 @@ import { selectCurrentOrder } from "../features/order/orderSlice";
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
-const stripePromise = loadStripe("sk_test_51ONyuISAl505I7xcXaQkJyClSaRv3zhJU4I3L3zmT5UyQi8O743RJKqmy9iQls9adgH1YcrhVHsbb7x0Cz1bZTyn00Rs46dTjM");
+const stripePromise = loadStripe("pk_test_51N5NLVSF2Mo4AGVvYGMMNnTcPA5lHrkUv8zPymsKfL31c8m6et8525Y92zMgA22m1u6ZkkXsBofre0PJL6i3eVsh00sR6M8c00");
 
 export default function StripeCheckout() {
   const [clientSecret, setClientSecret] = useState("");

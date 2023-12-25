@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from 'dotenv'
 dotenv.config();
+import {env} from 'process'
 const app = express();
 import mongoose from "mongoose";
 import cors from "cors";
@@ -25,7 +26,7 @@ import UserRouter from "./Routes/UserRoutes.js";
 import AuthRouter from "./Routes/AuthRoutes.js";
 import CartRouter from "./Routes/CartRoutes.js";
 import OrderRouter from "./Routes/OrderRoute.js";
-import { cookieExtractor, isAuth, sanitizeUser } from "./Services/common.js";
+import { cookieExtractor, isAuth, sanitizeUser, sendMail } from "./Services/common.js";
 import { User } from "./Models/User.js";
 
 import stripeModule from 'stripe';
@@ -104,6 +105,8 @@ app.use("/brands", isAuth(), Brandrouter);
 app.use("/categories", isAuth(), Categoryrouter);
 app.use("/cart", isAuth(), CartRouter);
 app.use("/orders", isAuth(), OrderRouter);
+
+app.post('/mail',sendMail)
 
 app.get('*',(req,res)=> res.sendFile(path.resolve('build','index.html')))
 
