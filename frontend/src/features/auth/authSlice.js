@@ -43,8 +43,8 @@ export const checkAuthAsync = createAsyncThunk(
 );
 export const logoutUserAsync = createAsyncThunk(
   "user/logoutUser",
-  async (loginInfo) => {
-    const response = await signOut(loginInfo);
+  async () => {
+    const response = await signOut();
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
@@ -135,7 +135,7 @@ export const authSlice = createSlice({
       })
       .addCase(resetPasswordAsync.rejected, (state, action) => {
         state.status = "idle";
-        state.error = true;
+        state.error = action.payload;
       })
   },
 });
