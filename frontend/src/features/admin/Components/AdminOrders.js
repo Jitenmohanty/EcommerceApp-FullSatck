@@ -83,7 +83,7 @@ function AdminOrders() {
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0 text-center cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: "id",
@@ -99,9 +99,9 @@ function AdminOrders() {
                         <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>
                       ))}
                   </th>
-                  <th className="py-3 px-0 text-left">Items</th>
+                  <th className="py-3 px-0 text-center">Items</th>
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0 text-center cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: "totalAmount",
@@ -123,7 +123,7 @@ function AdminOrders() {
                   <th className="py-3 px-0 text-center">Payment Status</th>
 
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0 text-center cursor-pointer"
                     onClick={(e) => {
                       handleSort({
                         sort: "createdAt",
@@ -140,7 +140,7 @@ function AdminOrders() {
                       ))}
                   </th>
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0 text-center cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: "updatedAt",
@@ -166,13 +166,13 @@ function AdminOrders() {
                     key={order.id}
                     className="border-b border-gray-200 hover:bg-gray-100"
                   >
-                    <td className="py-3 px-0 text-left whitespace-nowrap">
+                    <td className="py-3 px-0 text-center whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="mr-2"></div>
                         <span className="font-medium text-sm">{order.id}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-0 text-left">
+                    <td className="py-3 px-0 text-center">
                       {order.items.map((item, index) => (
                         <div key={index} className="flex items-center">
                           <div className="mr-2">

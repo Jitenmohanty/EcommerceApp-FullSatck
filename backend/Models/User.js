@@ -21,7 +21,7 @@ const userSchema = new Schema({
   orders: { type: [Schema.Types.Mixed] },
   resetPasswordToken: {type: String, default:''},
   salt:Buffer,
-});
+},{timestamps:true});
 
 const virtual = userSchema.virtual('id');
 virtual.get(function () {

@@ -1,4 +1,6 @@
 import { Order } from "../Models/Order.js";
+import { User } from "../Models/User.js";
+import { invoiceTemplate, sendMail } from "../Services/common.js";
 
 export const fetchOrderByUser = async(req,res)=>{
     const {id} = req.user;
@@ -39,12 +41,16 @@ export const fetchAllOrders = async(req,res)=>{
 }
 
 export const createOrder = async(req,res)=>{
-    const order = new Order(req.body)
+    const order = new Order(req.body);
     try {
-        const orderItem = await order.save();
-        res.status(201).json(orderItem)
-    } catch (error) {
-        res.status(400).json(error)
+      const doc = await order.save();
+      const user = await User.findById(order.user)
+       // we can use await for this also 
+       sendMail({to:user.email,html:invoiceTemplate(order),subject:'Order Received' })
+             
+      res.status(201).json(doc);
+    } catch (err) {
+      res.status(400).json(err);
     }
 }
 export const deleteOrder = async(req,res)=>{
