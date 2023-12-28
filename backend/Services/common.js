@@ -41,7 +41,7 @@ export const sendMail = async function ({ to, subject, text, html }) {
 };
 
 export const invoiceTemplate = function (order) {
-  return (`<!DOCTYPE html>
+  return `<!DOCTYPE html>
   <html>
   <head>
   
@@ -168,7 +168,12 @@ export const invoiceTemplate = function (order) {
             <tr>
               <td align="center" valign="top" style="padding: 36px 24px;">
                 <a href="https://sendgrid.com" target="_blank" style="display: inline-block;">
-                  <img src={"https://drive.google.com/file/d/1eLkG7s3UI9Q-8d2LTgrAzW32CQy72Vaz/view?usp=sharing"} alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
+                <img
+                src="https://www.pexels.com/photo/person-using-black-and-white-smartphone-and-holding-blue-card-230544/"
+                alt="Logo"
+                border="0"
+                width="48"
+              />
                 </a>
               </td>
             </tr>
@@ -371,5 +376,5 @@ export const invoiceTemplate = function (order) {
     <!-- end body -->
   
   </body>
-  </html>`);
+  </html>`;
 };
