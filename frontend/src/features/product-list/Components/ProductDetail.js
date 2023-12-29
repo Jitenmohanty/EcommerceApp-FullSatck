@@ -54,7 +54,7 @@ export default function ProductDetail() {
 
       dispatch(addToCartAsync(newItem));
       // TODO: it will be based on server response of backend
-      toast.success("Item added to Cart");
+      // toast.success("Item added to Cart");
     } else {
       toast.error("Item Already added");
     }

@@ -1,7 +1,4 @@
-import React, { useState, Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 
 import { Link } from "react-router-dom";
