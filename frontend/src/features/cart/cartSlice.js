@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { addToCart, fetchItemByUserId, removeItemFromCart, resetCart, updateItemById } from './cartApi';
+import {toast} from 'react-toastify'
 
 const initialState = {
   items: [],
@@ -11,6 +12,7 @@ export const addToCartAsync = createAsyncThunk(
   'cart/addToCart',
   async (item) => {
     const response = await addToCart(item);
+    toast.success('Item Added to Cart');
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }

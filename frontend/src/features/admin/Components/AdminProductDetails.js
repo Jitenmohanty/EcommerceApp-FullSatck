@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductByIdAsync, selectedProductById } from '../../product-list/productListSlice';
 import { useParams } from 'react-router-dom';
 import { addToCartAsync } from '../../cart/cartSlice';
-import {discountedPrice} from '../../../app/constant'
 
 // TODO: In server data we will add colors, sizes , highlights. to each product
 
@@ -148,7 +147,7 @@ export default function AdminProductDetail() {
                 ${product.price}
               </p>
               <p className="text-3xl tracking-tight text-gray-900">
-                ${discountedPrice(product)}
+                ${product.discountPrice}
               </p>
               {/* Reviews */}
               <div className="mt-6">

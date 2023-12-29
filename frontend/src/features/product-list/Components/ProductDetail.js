@@ -9,7 +9,6 @@ import {
   selectedProductById,
 } from "../productListSlice";
 import { addToCartAsync, selectCartItem } from "../../cart/cartSlice";
-import { discountedPrice } from "../../../app/constant";
 import { Grid } from "react-loader-spinner";
 import { toast } from "react-toastify";
 
@@ -170,7 +169,7 @@ export default function ProductDetail() {
                 ${product.price}
               </p>
               <p className="text-xl  tracking-tight text-gray-900">
-                ${discountedPrice(product)}
+                ${product.discountPrice}
               </p>
 
               {/* Reviews */}

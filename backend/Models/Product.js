@@ -24,14 +24,15 @@ const ProductSchema = new Schema({
   category: { type: String, required: true },
   thumbnail: { type: String, required: true },
   images: { type: [String], required: true },
+  discountPrice: { type: Number},
   colors:{ type : [Schema.Types.Mixed] },
   sizes:{ type : [Schema.Types.Mixed]},
   highlights:{ type : [String] },
   deleted: { type: Boolean, default: false },
 });
 
-const virtual = ProductSchema.virtual("id");
-virtual.get(function () {
+const virtualId = ProductSchema.virtual("id");
+virtualId.get(function () {
   return this._id;
 });
 ProductSchema.set("toJSON", {

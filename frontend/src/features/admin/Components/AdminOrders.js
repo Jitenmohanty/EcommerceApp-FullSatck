@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ITEM_PER_PAGE, discountedPrice } from "../../../app/constant";
+import { ITEM_PER_PAGE } from "../../../app/constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllOrdersAsync,
@@ -184,7 +184,7 @@ function AdminOrders() {
                           </div>
                           <span>
                             {item.product.title} - #{item.quantity} - $
-                            {discountedPrice(item.product)}
+                            {item.product.discountPrice}
                           </span>
                         </div>
                       ))}
