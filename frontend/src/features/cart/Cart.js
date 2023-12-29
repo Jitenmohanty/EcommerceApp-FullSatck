@@ -33,8 +33,8 @@ export default function Cart() {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
-      dispatch(removeItemFromCartAsync(item.id));
       if (result.isConfirmed) {
+        dispatch(removeItemFromCartAsync(item.id));
         Swal.fire({
           title: "Deleted!",
           text: "Your Item has been deleted.",

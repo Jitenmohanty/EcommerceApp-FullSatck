@@ -13,7 +13,7 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-console.log(user)
+// console.log(user)
   return (
     <>
     {user && <Navigate to="/" replace={true}></Navigate>}
