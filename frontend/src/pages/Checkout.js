@@ -49,7 +49,7 @@ function Checkout() {
 
   const handleAddress = (e) => {
     console.log(e.target.value);
-    setSelectedAddress(user.addresses[e.target.value]);
+    setSelectedAddress(user?.addresses[e.target.value]);
   };
 
   const handlePayment = (e) => {
@@ -95,7 +95,7 @@ function Checkout() {
       ) : (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3 flex justify-center">
               <form
                 className="bg-white px-5 py-12 mt-12"
                 noValidate
@@ -104,7 +104,7 @@ function Checkout() {
                   dispatch(
                     updateUserAsync({
                       ...user,
-                      addresses: [...user.addresses, data],
+                      addresses: [...user?.addresses, data],
                     })
                   );
                   reset();
@@ -281,7 +281,7 @@ function Checkout() {
                       Choose from Existing addresses
                     </p>
                     <ul role="list">
-                      {user.addresses.map((address, index) => (
+                      {user?.addresses.map((address, index) => (
                         <li
                           key={index}
                           className="flex justify-between gap-x-6 px-5 py-5 border-solid border-2 border-gray-200"
