@@ -86,10 +86,10 @@ app.use(
   })
 );
 
-
+app.use(passport.authenticate("session"));
 
 app.use(
-  coapp.use(passport.authenticate("session"));rs({
+  cors({
     exposedHeaders: ["X-Total-Count"],
   })
 );
