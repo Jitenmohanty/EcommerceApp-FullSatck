@@ -79,7 +79,7 @@ export default function ProductList() {
        const index = newFilter[section.id].findIndex(el=>el===option.value)
        newFilter[section.id].splice(index,1);
     }
-    console.log({newFilter});
+    // console.log({newFilter});
 
     setFilter(newFilter);
   };
@@ -97,7 +97,7 @@ export default function ProductList() {
   useEffect(() => {
     // set the api params as a page and limits item
     const pagination = { _page: page, _limit:ITEM_PER_PAGE };
-    console.log(ITEM_PER_PAGE)
+    // console.log(ITEM_PER_PAGE)
     dispatch(fetchProductsByFiltersAsync({filter, sort, pagination}));
 
   }, [dispatch,filter,sort,page]);
@@ -492,7 +492,7 @@ function ProductGrid({ products, status }) {
             />
           ) : null}
           {products && products.map((product) => (
-            <Link to={`/product-detail/${product.id}`} key={product.id}>
+            <Link to={`/product-detail/${product.id}`} key={product.id} > 
               <div className="group relative border-solid border-2 p-2 border-gray-200">
                 <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                   <img
