@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from 'dotenv'
 dotenv.config();
-import {env} from 'process'
 const app = express();
 import mongoose from "mongoose";
 import cors from "cors";
@@ -87,10 +86,10 @@ app.use(
   })
 );
 
-app.use(passport.authenticate("session"));
+
 
 app.use(
-  cors({
+  coapp.use(passport.authenticate("session"));rs({
     exposedHeaders: ["X-Total-Count"],
   })
 );
